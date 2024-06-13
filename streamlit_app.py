@@ -78,7 +78,7 @@ if ingredients_list:
             st.subheader(f"{fruit_chosen} Nutrition Information")
             
             # Fetching nutrition data from Fruityvice API
-            fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/{fruit_chosen}")
+            fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/all{fruit_chosen}")
             fruityvice_response.raise_for_status()
             fruit_data = fruityvice_response.json()
             
