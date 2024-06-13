@@ -40,7 +40,6 @@
 # if time_to_insert:
 #     session.sql(my_insert_stmt).collect()
 #     st.success('Your Smoothie is ordered!', icon="✅")
-
 import streamlit as st
 import requests
 from snowflake.snowpark.session import Session
@@ -83,6 +82,9 @@ if ingredients_list:
             fruityvice_response.raise_for_status()
             fruit_data = fruityvice_response.json()
             
+            # Debug the response structure
+            st.write(f"API response for {fruit_chosen}:", fruit_data)
+            
             # Check if the response contains the expected structure
             if isinstance(fruit_data, list) and fruit_data:
                 fruit_data = fruit_data[0]  # Assuming it's a list with one item
@@ -110,6 +112,7 @@ if ingredients_list:
             st.error(f"Error submitting order: {e}")
 else:
     st.write("No ingredients selected yet.")
+
 
 
 
