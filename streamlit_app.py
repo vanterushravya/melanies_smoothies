@@ -99,14 +99,15 @@ if ingredients_list:
     # Prepare SQL statement to insert order
     my_insert_stmt = """
         INSERT INTO smoothies.public.orders (ingredients, name_on_order)
-        VALUES (%(ingredients)s, %(name_on_order)s)
+        VALUES (?, ?)
     """
 
     # Insert order into Snowflake
     time_to_insert = st.button('Submit Order')
     if time_to_insert:
         try:
-            session.sql(my_insert_stmt, {'ingredients': ingredients_string, 'name_on_order': name_on_order}).collect()
+            # Bind parameters as a list
+            session.sql(my_insert_stmt, [ingredients_string, name_on_order]).collect()
             st.success('Your Smoothie is ordered!', icon="✅")
         except Exception as e:
             st.error(f"Error submitting order: {e}")
