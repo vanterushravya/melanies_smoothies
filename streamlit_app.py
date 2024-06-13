@@ -40,31 +40,31 @@ time_to_insert=st.button('Submit Order')
 if time_to_insert:
     session.sql(my_insert_stmt).collect()
     st.success('Your Smoothie is ordered!', icon="✅")
-import streamlit as st
-import requests
-from snowflake.snowpark.session import Session
-from snowflake.snowpark.functions import col
+# import streamlit as st
+# import requests
+# from snowflake.snowpark.session import Session
+# from snowflake.snowpark.functions import col
 
-# Initialize Snowflake connection
-cnx = st.connection("snowflake")
-session = cnx.session()
+# # Initialize Snowflake connection
+# cnx = st.connection("snowflake")
+# session = cnx.session()
 
-# Write directly to the app
-st.title("Customize your smoothie! :cup_with_straw:")
-st.write("Choose the fruits you want in your custom Smoothie!")
+# # Write directly to the app
+# st.title("Customize your smoothie! :cup_with_straw:")
+# st.write("Choose the fruits you want in your custom Smoothie!")
 
-# User input for name on order
-name_on_order = st.text_input('Name on Smoothie!')
-st.write('The name on your Smoothie will be:', name_on_order)
+# # User input for name on order
+# name_on_order = st.text_input('Name on Smoothie!')
+# st.write('The name on your Smoothie will be:', name_on_order)
 
-# Retrieve fruit options from Snowflake
-try:
-    fruit_options_df = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME')).collect()
-    fruit_options = [row['FRUIT_NAME'] for row in fruit_options_df]
-    st.write("Fruit options retrieved:", fruit_options)
-except Exception as e:
-    st.error(f"Error retrieving fruit options: {e}")
-    st.stop()
+# # Retrieve fruit options from Snowflake
+# try:
+#     fruit_options_df = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME')).collect()
+#     fruit_options = [row['FRUIT_NAME'] for row in fruit_options_df]
+#     st.write("Fruit options retrieved:", fruit_options)
+# except Exception as e:
+#     st.error(f"Error retrieving fruit options: {e}")
+#     st.stop()
 
 # # Display multiselect for ingredients
 # ingredients_list = st.multiselect('Choose up to 5 ingredients:', fruit_options, max_selections=5)
