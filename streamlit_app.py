@@ -62,6 +62,7 @@ st.write('The name on your Smoothie will be:', name_on_order)
 try:
     fruit_options_df = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME')).collect()
     fruit_options = [row['FRUIT_NAME'] for row in fruit_options_df]
+    st.write("Fruit options retrieved:", fruit_options)
 except Exception as e:
     st.error(f"Error retrieving fruit options: {e}")
     st.stop()
@@ -73,10 +74,11 @@ if ingredients_list:
     ingredients_string = ' '.join(ingredients_list)
 
     for fruit_chosen in ingredients_list:
-        st.subheader(f"{fruit_chosen} Nutrition Information")
-        
-        # Fetching nutrition data from Fruityvice API
+        st.write(f"Processing fruit: {fruit_chosen}")
         try:
+            st.subheader(f"{fruit_chosen} Nutrition Information")
+            
+            # Fetching nutrition data from Fruityvice API
             fruityvice_response = requests.get(f"https://fruityvice.com/api/fruit/{fruit_chosen}")
             fruityvice_response.raise_for_status()
             fruit_data = fruityvice_response.json()
@@ -85,7 +87,7 @@ if ingredients_list:
             if isinstance(fruit_data, list) and fruit_data:
                 fruit_data = fruit_data[0]  # Assuming it's a list with one item
 
-            # Displaying the data in a DataFrame
+            # Displaying the data
             st.write(fruit_data)
         except requests.exceptions.RequestException as e:
             st.error(f"Error fetching data for {fruit_chosen}: {e}")
@@ -93,7 +95,7 @@ if ingredients_list:
             st.error(f"Error processing data for {fruit_chosen}: {e}")
 
     # Prepare SQL statement to insert order
-    my_insert_stmt = f"""
+    my_insert_stmt = """
         INSERT INTO smoothies.public.orders (ingredients, name_on_order)
         VALUES (%(ingredients)s, %(name_on_order)s)
     """
@@ -106,6 +108,8 @@ if ingredients_list:
             st.success('Your Smoothie is ordered!', icon="✅")
         except Exception as e:
             st.error(f"Error submitting order: {e}")
+else:
+    st.write("No ingredients selected yet.")
 
 
 
